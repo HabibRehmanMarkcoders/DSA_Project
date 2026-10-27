@@ -367,13 +367,10 @@ if __name__ == "__main__":
         print("  index", i, "=", song["title"])
         i = i + 1
 
-    print("")
     print("Add song with append...")
     extra = manager.library[4]
     current.add_song(extra)
     print("Size after append:", current.size())
-
-    print("")
     print("Remove song at index 0 with pop...")
     removed = current.remove_song_at(0)
     if removed != None:
