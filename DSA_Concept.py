@@ -1,264 +1,381 @@
-"""
-DSA Concept file — Simple ARRAY for music playlists
+# ============================================================
+# DSA Concept — ARRAY (Python list)
+# ============================================================
+# Say this to your teacher:
+#   Add song     = append          (put at the END)
+#   Delete song  = pop(index)      (remove at a POSITION)
+#   Show songs   = for loop
+#   Move song    = swap two places
+# ============================================================
 
-This is the file your teacher will care about.
-We store songs in a Python list. A list works like an array.
 
-Main ideas you can say in the presentation:
-  - Add song   -> array.append(song)     (put at the END)
-  - Delete     -> array.pop(index)       (remove at a POSITION)
-  - Show all   -> loop over the array
-  - Move up/down -> swap two indexes
-"""
+# ---------- 1) Song library (array of songs) ----------
 
-# Demo MP3 links (free sample music from the internet)
-URL = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-{}.mp3"
-
-# Sample songs for the library (title, artist, genre)
-# This is also an ARRAY of songs.
-SAMPLE_SONGS_RAW = [
-    ("Neon Rain", "Luna Vale", "Synthwave"),
-    ("Golden Hour", "The Paper Kites", "Indie"),
-    ("Midnight Drive", "Kora Blue", "Electronic"),
-    ("Slow Burn", "Andre Cole", "R&B"),
-    ("Paper Planes", "Mika Rowe", "Pop"),
-    ("Salt & Static", "Hollow Tide", "Rock"),
-    ("Velvet Sky", "Nova Reyes", "Chill"),
-    ("Run Wild", "The Northern Lights", "Alternative"),
-    ("Afterglow", "Sable", "Dream Pop"),
-    ("City of Glass", "Echo Harbor", "Electronic"),
-    ("Blue Monday Sun", "Jonah Frost", "Folk"),
-    ("Lantern", "Maya Osei", "Acoustic"),
-]
+def make_one_song(song_id, title, artist, genre):
+    # Make one song as a simple dictionary (like a small box of info)
+    song = {}
+    song["id"] = song_id
+    song["title"] = title
+    song["artist"] = artist
+    song["genre"] = genre
+    # Free demo music link from the internet
+    song["url"] = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-" + str(song_id) + ".mp3"
+    return song
 
 
 def make_song_library():
-    """Build the song library as a simple array (list)."""
-    library = []  # empty array at the start
-    # loop: go through each sample song one by one
-    for i, (title, artist, genre) in enumerate(SAMPLE_SONGS_RAW):
-        song = {
-            "id": i + 1,           # unique number for this song
-            "title": title,
-            "artist": artist,
-            "genre": genre,
-            "url": URL.format(i + 1),  # link to play the mp3
-        }
-        # DSA: append adds the song at the END of the array
-        library.append(song)
+    # Start with an EMPTY array
+    library = []
+
+    # Add songs one by one using append
+    # DSA: append = put item at the END of the array
+    library.append(make_one_song(1, "Neon Rain", "Luna Vale", "Synthwave"))
+    library.append(make_one_song(2, "Golden Hour", "The Paper Kites", "Indie"))
+    library.append(make_one_song(3, "Midnight Drive", "Kora Blue", "Electronic"))
+    library.append(make_one_song(4, "Slow Burn", "Andre Cole", "R&B"))
+    library.append(make_one_song(5, "Paper Planes", "Mika Rowe", "Pop"))
+    library.append(make_one_song(6, "Salt & Static", "Hollow Tide", "Rock"))
+    library.append(make_one_song(7, "Velvet Sky", "Nova Reyes", "Chill"))
+    library.append(make_one_song(8, "Run Wild", "The Northern Lights", "Alternative"))
+    library.append(make_one_song(9, "Afterglow", "Sable", "Dream Pop"))
+    library.append(make_one_song(10, "City of Glass", "Echo Harbor", "Electronic"))
+    library.append(make_one_song(11, "Blue Monday Sun", "Jonah Frost", "Folk"))
+    library.append(make_one_song(12, "Lantern", "Maya Osei", "Acoustic"))
+
     return library
 
 
-class PlaylistArray:
-    """
-    One playlist = one ARRAY of songs.
+# ---------- 2) One playlist = one array of songs ----------
 
-    Think of self.songs like boxes in a row:
-      index 0 | index 1 | index 2 | ...
-    """
+class PlaylistArray:
 
     def __init__(self, name):
+        # Save the playlist name
         self.name = name
-        # This list IS our array. It stores songs in order.
+        # This list IS our array
+        # Example: [song0, song1, song2]
+        # Indexes:    0      1      2
         self.songs = []
 
     def size(self):
-        # How many songs are in the array right now
+        # How many songs are in the array
         return len(self.songs)
 
     def get_all(self):
-        # DSA: return the full array so UI can show it
+        # Give back the whole array
         return self.songs
 
     def get_at(self, index):
-        # DSA: read the song at this index (position)
-        if 0 <= index < len(self.songs):
-            return self.songs[index]
-        return None
+        # Read song at this position (index)
+        last_index = len(self.songs) - 1
+
+        if index < 0:
+            return None
+        if index > last_index:
+            return None
+
+        return self.songs[index]
 
     def add_song(self, song):
-        """Add a song to the END of the playlist array."""
-        # Do not add the same song twice
-        for s in self.songs:
-            if s["id"] == song["id"]:
-                return False  # already in the array
-        # DSA: append adds the song at the END of the array
+        # Check if song is already in the array
+        i = 0
+        while i < len(self.songs):
+            old_song = self.songs[i]
+            if old_song["id"] == song["id"]:
+                # Already there, do not add again
+                return False
+            i = i + 1
+
+        # DSA: append puts the song at the END
         self.songs.append(song)
         return True
 
     def remove_song_at(self, index):
-        """Delete the song at this index (position) from the array."""
-        # Check that the index is valid (inside the array)
-        if 0 <= index < len(self.songs):
-            # DSA: pop(index) removes the item at that position
-            # and returns the removed song
-            return self.songs.pop(index)
-        return None
+        # Delete song at this position
+        last_index = len(self.songs) - 1
+
+        if index < 0:
+            return None
+        if index > last_index:
+            return None
+
+        # DSA: pop(index) removes that position from the array
+        removed_song = self.songs.pop(index)
+        return removed_song
 
     def has_song(self, song_id):
-        # Check if this song id is already in our array
-        for s in self.songs:
-            if s["id"] == song_id:
+        # Is this song id already inside the array?
+        i = 0
+        while i < len(self.songs):
+            song = self.songs[i]
+            if song["id"] == song_id:
                 return True
+            i = i + 1
         return False
 
     def move_up(self, index):
-        """Move song one step UP (swap with the song above)."""
-        # Cannot move up if it is already the first song (index 0)
-        if index <= 0 or index >= len(self.songs):
+        # Move song one step UP = swap with the song above
+        # Cannot move up if index is 0 (already first)
+        if index <= 0:
             return False
-        # DSA: swap two places in the array
+        if index >= len(self.songs):
+            return False
+
         above = index - 1
-        self.songs[above], self.songs[index] = self.songs[index], self.songs[above]
+
+        # DSA: swap using a temp variable (easy to explain)
+        temp = self.songs[above]
+        self.songs[above] = self.songs[index]
+        self.songs[index] = temp
         return True
 
     def move_down(self, index):
-        """Move song one step DOWN (swap with the song below)."""
-        # Cannot move down if it is already the last song
-        if index < 0 or index >= len(self.songs) - 1:
+        # Move song one step DOWN = swap with the song below
+        last_index = len(self.songs) - 1
+
+        if index < 0:
             return False
-        # DSA: swap two places in the array
+        if index >= last_index:
+            return False
+
         below = index + 1
-        self.songs[below], self.songs[index] = self.songs[index], self.songs[below]
+
+        # DSA: swap using a temp variable
+        temp = self.songs[below]
+        self.songs[below] = self.songs[index]
+        self.songs[index] = temp
         return True
 
     def rename(self, new_name):
-        # Change the playlist name (not an array operation, just a label)
-        new_name = (new_name or "").strip()
-        if not new_name:
+        # Change only the name text
+        if new_name == None:
             return False
+
+        # Remove spaces at start and end
+        new_name = new_name.strip()
+
+        if new_name == "":
+            return False
+
         self.name = new_name
         return True
 
 
-class PlaylistManager:
-    """
-    Manager holds an ARRAY of playlists.
+# ---------- 3) Manager = array of playlists ----------
 
-    playlists = [ PlaylistArray("A"), PlaylistArray("B"), ... ]
-    """
+class PlaylistManager:
 
     def __init__(self):
-        # ARRAY of all playlists
+        # Array of all playlists
         self.playlists = []
-        # Song library (ARRAY of all available songs)
-        self.library = make_song_library()
-        # Which playlist index is selected in the UI (0, 1, 2, ...)
-        self.current_index = 0
-        # Put two starter playlists in the array so the app is not empty
-        self._make_starter_playlists()
 
-    def _find_song_by_id(self, song_id):
-        # Search the library array for one song by id
-        for song in self.library:
+        # Array of all songs we can pick from
+        self.library = make_song_library()
+
+        # Which playlist is selected (0 means first playlist)
+        self.current_index = 0
+
+        # Make two starter playlists so app is not empty
+        self.make_starter_playlists()
+
+    def find_song_by_id(self, song_id):
+        # Look through library array one by one
+        i = 0
+        while i < len(self.library):
+            song = self.library[i]
             if song["id"] == song_id:
                 return song
+            i = i + 1
         return None
 
-    def _make_starter_playlists(self):
-        # Create first playlist and append some songs into its array
+    def make_starter_playlists(self):
+        # ---- playlist 1 ----
         late_night = PlaylistArray("Late Night Drive")
-        for song_id in [3, 1, 10]:
-            song = self._find_song_by_id(song_id)
-            if song:
-                late_night.add_song(song)
-        # DSA: append this playlist to the playlists array
+
+        song_a = self.find_song_by_id(3)
+        song_b = self.find_song_by_id(1)
+        song_c = self.find_song_by_id(10)
+
+        if song_a != None:
+            late_night.add_song(song_a)
+        if song_b != None:
+            late_night.add_song(song_b)
+        if song_c != None:
+            late_night.add_song(song_c)
+
+        # DSA: append playlist to playlists array
         self.playlists.append(late_night)
 
-        # Create second playlist
+        # ---- playlist 2 ----
         morning = PlaylistArray("Morning Coffee")
-        for song_id in [2, 12, 11, 7]:
-            song = self._find_song_by_id(song_id)
-            if song:
-                morning.add_song(song)
-        # DSA: append this playlist to the playlists array
+
+        song_d = self.find_song_by_id(2)
+        song_e = self.find_song_by_id(12)
+        song_f = self.find_song_by_id(11)
+        song_g = self.find_song_by_id(7)
+
+        if song_d != None:
+            morning.add_song(song_d)
+        if song_e != None:
+            morning.add_song(song_e)
+        if song_f != None:
+            morning.add_song(song_f)
+        if song_g != None:
+            morning.add_song(song_g)
+
+        # DSA: append playlist to playlists array
         self.playlists.append(morning)
 
-        # Start by selecting the first playlist (index 0)
+        # Select first playlist
         self.current_index = 0
 
     def create_playlist(self, name):
-        """Make a new empty playlist and add it to the playlists array."""
-        name = (name or "").strip()
-        if not name:
+        # Make a new empty playlist and put it in the array
+        if name == None:
             return None
+
+        name = name.strip()
+        if name == "":
+            return None
+
         playlist = PlaylistArray(name)
-        # DSA: append adds the new playlist at the END of the array
+
+        # DSA: append = add at the END of playlists array
         self.playlists.append(playlist)
-        # Select the new playlist (it is now the last index)
+
+        # New playlist is now the last one
         self.current_index = len(self.playlists) - 1
         return playlist
 
     def delete_playlist(self, index):
-        """Remove one playlist from the playlists array by index."""
-        if 0 <= index < len(self.playlists):
-            # DSA: pop(index) removes that playlist from the array
-            removed = self.playlists.pop(index)
-            # After delete, pick a safe current index
-            if len(self.playlists) == 0:
-                self.current_index = None
-            elif self.current_index is None or self.current_index >= len(self.playlists):
+        # Remove one playlist by its index
+        last_index = len(self.playlists) - 1
+
+        if index < 0:
+            return None
+        if index > last_index:
+            return None
+
+        # DSA: pop(index) removes that playlist from the array
+        removed = self.playlists.pop(index)
+
+        # Fix current_index after delete
+        if len(self.playlists) == 0:
+            self.current_index = None
+        else:
+            # If current index is now too big, go to last playlist
+            if self.current_index == None:
                 self.current_index = len(self.playlists) - 1
-            return removed
-        return None
+            elif self.current_index >= len(self.playlists):
+                self.current_index = len(self.playlists) - 1
+
+        return removed
 
     def rename_playlist(self, index, new_name):
-        """Rename the playlist at this index."""
-        if 0 <= index < len(self.playlists):
-            return self.playlists[index].rename(new_name)
-        return False
+        last_index = len(self.playlists) - 1
+
+        if index < 0:
+            return False
+        if index > last_index:
+            return False
+
+        playlist = self.playlists[index]
+        ok = playlist.rename(new_name)
+        return ok
 
     def get_current(self):
-        """Return the selected playlist object (or None)."""
-        if self.current_index is None:
+        # Return the selected playlist
+        if self.current_index == None:
             return None
-        if 0 <= self.current_index < len(self.playlists):
-            return self.playlists[self.current_index]
-        return None
+
+        last_index = len(self.playlists) - 1
+        if self.current_index < 0:
+            return None
+        if self.current_index > last_index:
+            return None
+
+        return self.playlists[self.current_index]
 
     def select_playlist(self, index):
-        """Select which playlist is current (by index in the array)."""
-        if 0 <= index < len(self.playlists):
-            self.current_index = index
-            return True
-        return False
+        # Choose which playlist is current
+        last_index = len(self.playlists) - 1
+
+        if index < 0:
+            return False
+        if index > last_index:
+            return False
+
+        self.current_index = index
+        return True
 
     def search_library(self, query):
-        """Search the library array by title, artist, or genre."""
-        q = (query or "").lower().strip()
-        if not q:
-            # No search text -> return full library array
+        # Search songs in the library array
+        if query == None:
             return self.library
+
+        query = query.strip()
+        query = query.lower()
+
+        # If search box is empty, return full library
+        if query == "":
+            return self.library
+
+        # Make a new array for matching songs
         result = []
-        # Loop through the library array and keep matches
-        for song in self.library:
-            text = (song["title"] + song["artist"] + song["genre"]).lower()
-            if q in text:
-                # DSA: append matching songs into a new result array
+
+        i = 0
+        while i < len(self.library):
+            song = self.library[i]
+            title = song["title"].lower()
+            artist = song["artist"].lower()
+            genre = song["genre"].lower()
+
+            # Simple check: is query text inside title or artist or genre?
+            found = False
+            if query in title:
+                found = True
+            if query in artist:
+                found = True
+            if query in genre:
+                found = True
+
+            if found == True:
+                # DSA: append match into result array
                 result.append(song)
+
+            i = i + 1
+
         return result
 
 
-# Quick self-test you can run:  python DSA_Concept.py
-# This helps you practice explaining without opening the UI.
+# ---------- 4) Small demo (no UI) ----------
+# Run:  python DSA_Concept.py
+
 if __name__ == "__main__":
-    print("=== DSA Array Demo (no UI) ===")
+    print("=== DSA Array Demo ===")
+
     manager = PlaylistManager()
-    print("Playlists in array:", len(manager.playlists))
+    print("How many playlists:", len(manager.playlists))
 
     current = manager.get_current()
-    print("Current playlist:", current.name)
-    print("Songs in this playlist array:")
-    for i, song in enumerate(current.get_all()):
-        print(f"  index {i}: {song['title']}")
+    print("Current playlist name:", current.name)
 
-    print("\nAdd a song with append...")
-    extra = manager.library[4]  # Paper Planes
+    print("Songs in array:")
+    i = 0
+    while i < current.size():
+        song = current.get_at(i)
+        print("  index", i, "=", song["title"])
+        i = i + 1
+
+    print("")
+    print("Add song with append...")
+    extra = manager.library[4]
     current.add_song(extra)
-    print("After append, size =", current.size())
+    print("Size after append:", current.size())
 
-    print("\nRemove song at index 0 with pop...")
+    print("")
+    print("Remove song at index 0 with pop...")
     removed = current.remove_song_at(0)
-    print("Removed:", removed["title"] if removed else None)
-    print("Size now =", current.size())
-    print("Done. Open DSA_Concept.py to explain these methods to your teacher.")
+    if removed != None:
+        print("Removed song:", removed["title"])
+    print("Size now:", current.size())
