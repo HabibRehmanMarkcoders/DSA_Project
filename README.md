@@ -1,6 +1,13 @@
-# Pulse — Music Playlist Manager
+# Pulse — Music Playlist Manager (Array DSA)
 
-A Python Streamlit app for managing playlists and playing demo songs. All CRUD (create, read, update, delete) runs in Python — no separate backend or JavaScript.
+A Python Streamlit app for managing playlists.  
+**DSA concept:** simple **array** (Python `list`) — add with `append`, delete with `pop(index)`.
+
+| File | What it is | For presentation |
+|---|---|---|
+| `DSA_Concept.py` | Array logic + easy English comments | **Show this to your teacher** |
+| `UI.py` | Buttons and screens (Streamlit) | Skip if you only need DSA |
+| `app.py` | Short pointer / backup entry | Not needed for explaining DSA |
 
 ---
 
@@ -46,10 +53,7 @@ and use `py` instead of `python` in later commands.
 ### macOS
 
 ```bash
-# Option A — Homebrew
 brew install python
-
-# Then check
 python3 --version
 pip3 --version
 ```
@@ -67,8 +71,6 @@ pip3 --version
 
 ## Step 2 — Open the project folder
 
-In Command Prompt / PowerShell / Terminal, go to the project directory.
-
 **Windows example:**
 
 ```bash
@@ -81,7 +83,7 @@ cd C:\Users\USER\OneDrive\Desktop\dsa
 cd ~/Desktop/dsa
 ```
 
-Confirm you see `app.py` and `requirements.txt`:
+Confirm you see `DSA_Concept.py`, `UI.py`, and `requirements.txt`:
 
 ```bash
 dir
@@ -93,9 +95,7 @@ dir
 
 ## Step 3 — (Recommended) Create a virtual environment
 
-This keeps project packages separate from your system Python.
-
-**Windows (Command Prompt / PowerShell):**
+**Windows:**
 
 ```bash
 python -m venv venv
@@ -111,7 +111,7 @@ Activate it:
 venv\Scripts\activate.bat
 ```
 
-If PowerShell blocks activation, run this once, then try again:
+If PowerShell blocks activation:
 
 ```bash
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
@@ -124,15 +124,11 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-When the venv is active, your prompt usually starts with `(venv)`.
-
 ---
 
 ## Step 4 — Install packages
 
-Install everything listed in `requirements.txt` (Streamlit and its dependencies):
-
-**Windows (with `python` / `pip`):**
+**Windows:**
 
 ```bash
 python -m pip install --upgrade pip
@@ -146,27 +142,25 @@ python3 -m pip install --upgrade pip
 pip3 install -r requirements.txt
 ```
 
-Wait until installation finishes with no errors.
-
 ---
 
 ## Step 5 — Run the app
 
 ```bash
-streamlit run app.py
+streamlit run UI.py
 ```
 
-Streamlit will start a local server and open the app in your browser (usually at http://localhost:8501).
+The app opens in your browser (usually http://localhost:8501).
 
-If the browser does not open by itself, copy the URL from the terminal and paste it into Chrome / Edge / Firefox.
+### DSA-only demo (no UI — good for practice)
+
+```bash
+python DSA_Concept.py
+```
 
 ### Stop the app
 
-In the terminal, press:
-
-```text
-Ctrl + C
-```
+Press `Ctrl + C` in the terminal.
 
 ### Deactivate the virtual environment (optional)
 
@@ -176,14 +170,16 @@ deactivate
 
 ---
 
-## Features
+## Features (mapped to DSA)
 
-- Create, rename, and delete playlists
-- Search the song library and add tracks
-- Reorder songs (up / down) and remove them
-- Play a track or play all (via Streamlit audio player)
+- Create playlist → `append` to playlists array
+- Delete playlist → `pop(index)` from playlists array
+- Add song → `append` to playlist songs array
+- Remove song → `pop(index)` from playlist songs array
+- Move up / down → swap two indexes in the array
+- Search library → loop over the library array
 
-Data is stored in memory for the browser session (resets when you stop/restart the app).
+Data is in memory for the session (resets when you stop/restart the app).
 
 ---
 
@@ -192,18 +188,15 @@ Data is stored in memory for the browser session (resets when you stop/restart t
 | Problem | Fix |
 |---|---|
 | `python` not found | Reinstall Python and enable **Add to PATH**, or use `py` |
-| `pip` not found | Run `python -m ensurepip --upgrade` then `python -m pip install --upgrade pip` |
-| `streamlit` not found | Make sure the venv is activated, then run `pip install -r requirements.txt` again |
+| `pip` not found | `python -m ensurepip --upgrade` then `python -m pip install --upgrade pip` |
+| `streamlit` not found | Activate venv, then `pip install -r requirements.txt` |
 | PowerShell activation error | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
-| Port already in use | `streamlit run app.py --server.port 8502` |
-| Audio does not play | Check your internet connection (demo MP3s are loaded from the web) |
+| Port already in use | `streamlit run UI.py --server.port 8502` |
+| Audio does not play | Check your internet connection |
 
 ---
 
 ## All commands combined (Windows)
-
-Copy and run these in order from **PowerShell** or **Command Prompt**.  
-Adjust the `cd` path if your project folder is somewhere else.
 
 ```bash
 cd C:\Users\USER\OneDrive\Desktop\dsa
@@ -213,7 +206,7 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-streamlit run app.py
+streamlit run UI.py
 ```
 
 **Command Prompt** activation line (instead of `Activate.ps1`):
@@ -234,5 +227,5 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install --upgrade pip
 pip3 install -r requirements.txt
-streamlit run app.py
+streamlit run UI.py
 ```
